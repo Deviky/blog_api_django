@@ -84,11 +84,28 @@ WSGI_APPLICATION = 'blog_platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blogdb',       # Имя базы данных
+        'USER': 'root',      # Имя пользователя MySQL
+        'PASSWORD': '915327',  # Пароль пользователя
+        'HOST': 'localhost',              # Адрес сервера (обычно 'localhost' или '127.0.0.1')
+        'PORT': '3306',                    # Порт MySQL (по умолчанию 3306)
+        'OPTIONS': {
+            'charset': 'utf8mb4',          # Рекомендуемая кодировка (поддержка emoji)
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",  # Строгий режим SQL
+        },
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/1",  # Redis должен быть запущен
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

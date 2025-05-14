@@ -20,12 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class UserDetailWithPostsSerializer(serializers.ModelSerializer):
+    posts = serializers.SerializerMethodField()  # ✅ Явно добавляем поле
 
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'email', 'bio', 'posts')
 
     def get_posts(self, obj):
-        from blog.serializers import PostSerializer  # импорт здесь!
-        posts = obj.posts.all()
+        from blog.serializers import PostSerializer  # импорт внутри метода — ОК
+        posts = obj.post_set.all()  # ⚠️ Используем default related_name
         return PostSerializer(posts, many=True).data
